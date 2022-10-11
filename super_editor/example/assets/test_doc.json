@@ -1,0 +1,1173 @@
+{
+  "content": {
+    "document": {
+      "children": [
+        {
+          "type": "paragraph",
+          "data": {
+            "speaker": "Người nói 1",
+            "start": 120,
+            "end": 95280,
+            "etime": null,
+            "id": "paragraph-content-120-1663732827802"
+          },
+          "children": [
+            {
+              "text": "họ",
+              "data": {
+                "stime": 120,
+                "etime": 220,
+                "confidence": 1
+              }
+            },
+            {
+              "text": " có",
+              "data": {
+                "stime": 260,
+                "etime": 380,
+                "confidence": 1
+              }
+            },
+            {
+              "text": " bao",
+              "data": {
+                "stime": 420,
+                "etime": 500,
+                "confidence": 1
+              }
+            },
+            {
+              "text": " nhiêu",
+              "data": {
+                "stime": 540,
+                "etime": 700,
+                "confidence": 1
+              }
+            },
+            {
+              "text": " người",
+              "data": {
+                "stime": 740,
+                "etime": 860,
+                "confidence": 1
+              }
+            },
+            {
+              "text": " thôi",
+              "data": {
+                "stime": 900,
+                "etime": 1020,
+                "confidence": 1
+              }
+            },
+            {
+              "text": ",",
+              "data": {
+                "stime": 1020,
+                "etime": 1020,
+                "confidence": 1
+              }
+            },
+            {
+              "text": " nó",
+              "data": {
+                "stime": 1120,
+                "etime": 1200,
+                "confidence": 1
+              }
+            },
+            {
+              "text": " vẫn",
+              "data": {
+                "stime": 1240,
+                "etime": 1340,
+                "confidence": 1
+              }
+            },
+            {
+              "text": " sẽ",
+              "data": {
+                "stime": 1380,
+                "etime": 1500,
+                "confidence": 1
+              }
+            },
+            {
+              "text": " ra",
+              "data": {
+                "stime": 1540,
+                "etime": 1680,
+                "confidence": 1
+              }
+            },
+            {
+              "text": " vào",
+              "data": {
+                "stime": 1700,
+                "etime": 1840,
+                "confidence": 1
+              }
+            }
+
+            ]
+        },
+        {
+          "type": "paragraph",
+          "data": {
+            "speaker": "Người nói 1",
+            "start": 121980,
+            "end": 149820,
+            "etime": null,
+            "id": "paragraph-content-121980-1663732827802"
+          },
+          "children": [
+            {
+              "text": " đang",
+              "data": {
+                "stime": 121980,
+                "etime": 122100,
+                "confidence": 1
+              }
+            },
+            {
+              "text": " đến",
+              "data": {
+                "stime": 122140,
+                "etime": 122320,
+                "confidence": 1
+              }
+            },
+            {
+              "text": " kỹ",
+              "data": {
+                "stime": 122360,
+                "etime": 122520,
+                "confidence": 1
+              }
+            },
+            {
+              "text": " thuật",
+              "data": {
+                "stime": 122560,
+                "etime": 122679,
+                "confidence": 1
+              }
+            },
+            {
+              "text": " sớm",
+              "data": {
+                "stime": 122720,
+                "etime": 122800,
+                "confidence": 1
+              }
+            },
+            {
+              "text": ".",
+              "data": {
+                "stime": 122800,
+                "etime": 122800,
+                "confidence": 1
+              }
+            },
+            {
+              "text": " Cái",
+              "data": {
+                "stime": 122840,
+                "etime": 123560,
+                "confidence": 1
+              }
+            },
+            {
+              "text": " vấn",
+              "data": {
+                "stime": 123600,
+                "etime": 123740,
+                "confidence": 1
+              }
+            },
+            {
+              "text": " đề",
+              "data": {
+                "stime": 123780,
+                "etime": 123900,
+                "confidence": 1
+              }
+            },
+            {
+              "text": " nội",
+              "data": {
+                "stime": 124140,
+                "etime": 124300,
+                "confidence": 1
+              }
+            },
+            {
+              "text": " dung",
+              "data": {
+                "stime": 124340,
+                "etime": 126460,
+                "confidence": 1
+              }
+            },
+            {
+              "text": " cuộc",
+              "data": {
+                "stime": 126500,
+                "etime": 126660,
+                "confidence": 1
+              }
+            },
+            {
+              "text": " họp",
+              "data": {
+                "stime": 126700,
+                "etime": 126860,
+                "confidence": 1
+              }
+            },
+            {
+              "text": " thực",
+              "data": {
+                "stime": 127060,
+                "etime": 127180,
+                "confidence": 1
+              }
+            },
+            {
+              "text": " ra",
+              "data": {
+                "stime": 127220,
+                "etime": 127360,
+                "confidence": 1
+              }
+            },
+            {
+              "text": " thì",
+              "data": {
+                "stime": 127400,
+                "etime": 127620,
+                "confidence": 1
+              }
+            },
+            {
+              "text": " cũng",
+              "data": {
+                "stime": 127660,
+                "etime": 127800,
+                "confidence": 1
+              }
+            },
+            {
+              "text": " không",
+              "data": {
+                "stime": 128199,
+                "etime": 129400,
+                "confidence": 1
+              }
+            },
+            {
+              "text": " có",
+              "data": {
+                "stime": 131860,
+                "etime": 131980,
+                "confidence": 1
+              }
+            },
+            {
+              "text": " ai",
+              "data": {
+                "stime": 132020,
+                "etime": 132100,
+                "confidence": 1
+              }
+            },
+            {
+              "text": ".",
+              "data": {
+                "stime": 132100,
+                "etime": 132100,
+                "confidence": 1
+              }
+            },
+            {
+              "text": " Còn",
+              "data": {
+                "stime": 132140,
+                "etime": 132240,
+                "confidence": 1
+              }
+            },
+            {
+              "text": " tất",
+              "data": {
+                "stime": 132280,
+                "etime": 132380,
+                "confidence": 1
+              }
+            },
+            {
+              "text": " nhiên",
+              "data": {
+                "stime": 132760,
+                "etime": 133000,
+                "confidence": 1
+              }
+            },
+            {
+              "text": " là",
+              "data": {
+                "stime": 133040,
+                "etime": 133120,
+                "confidence": 1
+              }
+            },
+            {
+              "text": " lâu",
+              "data": {
+                "stime": 133260,
+                "etime": 133320,
+                "confidence": 1
+              }
+            },
+            {
+              "text": ",",
+              "data": {
+                "stime": 133320,
+                "etime": 133320,
+                "confidence": 1
+              }
+            },
+            {
+              "text": " bít",
+              "data": {
+                "stime": 133340,
+                "etime": 133440,
+                "confidence": 1
+              }
+            },
+            {
+              "text": " được",
+              "data": {
+                "stime": 133500,
+                "etime": 133600,
+                "confidence": 1
+              }
+            },
+            {
+              "text": " vấn",
+              "data": {
+                "stime": 133640,
+                "etime": 133740,
+                "confidence": 1
+              }
+            },
+            {
+              "text": " đề",
+              "data": {
+                "stime": 133780,
+                "etime": 133880,
+                "confidence": 1
+              }
+            },
+            {
+              "text": " truy",
+              "data": {
+                "stime": 136799,
+                "etime": 137060,
+                "confidence": 1
+              }
+            },
+            {
+              "text": " cập",
+              "data": {
+                "stime": 137100,
+                "etime": 137500,
+                "confidence": 1
+              }
+            },
+            {
+              "text": " đâu",
+              "data": {
+                "stime": 137640,
+                "etime": 139100,
+                "confidence": 1
+              }
+            },
+            {
+              "text": ".",
+              "data": {
+                "stime": 139100,
+                "etime": 139100,
+                "confidence": 1
+              }
+            },
+            {
+              "text": " Bạn",
+              "data": {
+                "stime": 139280,
+                "etime": 139420,
+                "confidence": 1
+              }
+            },
+            {
+              "text": " muốn",
+              "data": {
+                "stime": 139459,
+                "etime": 139540,
+                "confidence": 1
+              }
+            },
+            {
+              "text": " bạn",
+              "data": {
+                "stime": 139579,
+                "etime": 139640,
+                "confidence": 1
+              }
+            },
+            {
+              "text": " đều",
+              "data": {
+                "stime": 139840,
+                "etime": 139920,
+                "confidence": 1
+              }
+            },
+            {
+              "text": " như",
+              "data": {
+                "stime": 139940,
+                "etime": 140060,
+                "confidence": 1
+              }
+            },
+            {
+              "text": " là",
+              "data": {
+                "stime": 140100,
+                "etime": 140179,
+                "confidence": 1
+              }
+            },
+            {
+              "text": " là",
+              "data": {
+                "stime": 140200,
+                "etime": 140340,
+                "confidence": 1
+              }
+            },
+            {
+              "text": " những",
+              "data": {
+                "stime": 140399,
+                "etime": 140440,
+                "confidence": 1
+              }
+            },
+            {
+              "text": " cái",
+              "data": {
+                "stime": 140540,
+                "etime": 140619,
+                "confidence": 1
+              }
+            },
+            {
+              "text": " trường",
+              "data": {
+                "stime": 140679,
+                "etime": 140760,
+                "confidence": 1
+              }
+            },
+            {
+              "text": " hợp",
+              "data": {
+                "stime": 141140,
+                "etime": 141160,
+                "confidence": 1
+              }
+            },
+            {
+              "text": " của",
+              "data": {
+                "stime": 141200,
+                "etime": 141280,
+                "confidence": 1
+              }
+            },
+            {
+              "text": " Đông",
+              "data": {
+                "stime": 141320,
+                "etime": 141560,
+                "confidence": 1
+              }
+            },
+            {
+              "text": " mà",
+              "data": {
+                "stime": 141600,
+                "etime": 141679,
+                "confidence": 1
+              }
+            },
+            {
+              "text": " nó",
+              "data": {
+                "stime": 141720,
+                "etime": 141780,
+                "confidence": 1
+              }
+            },
+            {
+              "text": " cần",
+              "data": {
+                "stime": 141820,
+                "etime": 141940,
+                "confidence": 1
+              }
+            },
+            {
+              "text": ".",
+              "data": {
+                "stime": 141940,
+                "etime": 141940,
+                "confidence": 1
+              }
+            },
+            {
+              "text": " Vấn",
+              "data": {
+                "stime": 142619,
+                "etime": 142700,
+                "confidence": 1
+              }
+            },
+            {
+              "text": " đề",
+              "data": {
+                "stime": 142899,
+                "etime": 143000,
+                "confidence": 1
+              }
+            },
+            {
+              "text": " vào",
+              "data": {
+                "stime": 143040,
+                "etime": 143239,
+                "confidence": 1
+              }
+            },
+            {
+              "text": " nội",
+              "data": {
+                "stime": 143280,
+                "etime": 143440,
+                "confidence": 1
+              }
+            },
+            {
+              "text": " sẽ",
+              "data": {
+                "stime": 143540,
+                "etime": 143560,
+                "confidence": 1
+              }
+            },
+            {
+              "text": " triển",
+              "data": {
+                "stime": 143600,
+                "etime": 143840,
+                "confidence": 1
+              }
+            },
+            {
+              "text": " khai",
+              "data": {
+                "stime": 143959,
+                "etime": 144480,
+                "confidence": 1
+              }
+            },
+            {
+              "text": ",",
+              "data": {
+                "stime": 144480,
+                "etime": 144480,
+                "confidence": 1
+              }
+            },
+            {
+              "text": " có",
+              "data": {
+                "stime": 144520,
+                "etime": 144740,
+                "confidence": 1
+              }
+            },
+            {
+              "text": " những",
+              "data": {
+                "stime": 144800,
+                "etime": 144940,
+                "confidence": 1
+              }
+            },
+            {
+              "text": " cái",
+              "data": {
+                "stime": 145020,
+                "etime": 145160,
+                "confidence": 1
+              }
+            },
+            {
+              "text": " phát",
+              "data": {
+                "stime": 145180,
+                "etime": 145300,
+                "confidence": 1
+              }
+            },
+            {
+              "text": " triển",
+              "data": {
+                "stime": 145340,
+                "etime": 145460,
+                "confidence": 1
+              }
+            },
+            {
+              "text": " khai",
+              "data": {
+                "stime": 145500,
+                "etime": 145580,
+                "confidence": 1
+              }
+            },
+            {
+              "text": " cho",
+              "data": {
+                "stime": 145620,
+                "etime": 145720,
+                "confidence": 1
+              }
+            },
+            {
+              "text": " những",
+              "data": {
+                "stime": 145760,
+                "etime": 147220,
+                "confidence": 1
+              }
+            },
+            {
+              "text": " cái",
+              "data": {
+                "stime": 147700,
+                "etime": 147800,
+                "confidence": 1
+              }
+            },
+            {
+              "text": " danh",
+              "data": {
+                "stime": 147840,
+                "etime": 147980,
+                "confidence": 1
+              }
+            },
+            {
+              "text": " giá",
+              "data": {
+                "stime": 148020,
+                "etime": 149080,
+                "confidence": 1
+              }
+            },
+            {
+              "text": ",",
+              "data": {
+                "stime": 149080,
+                "etime": 149080,
+                "confidence": 1
+              }
+            },
+            {
+              "text": " cái",
+              "data": {
+                "stime": 149120,
+                "etime": 149820,
+                "confidence": 1
+              }
+            },
+            {
+              "text": " người",
+              "data": {
+                "stime": 153060,
+                "etime": 153700,
+                "confidence": 1
+              }
+            },
+            {
+              "text": " dùng",
+              "data": {
+                "stime": 153740,
+                "etime": 153840,
+                "confidence": 1
+              }
+            },
+            {
+              "text": " họ",
+              "data": {
+                "stime": 153880,
+                "etime": 153980,
+                "confidence": 1
+              }
+            },
+            {
+              "text": " ẽ",
+              "data": {
+                "stime": 154020,
+                "etime": 154120,
+                "confidence": 1
+              }
+            },
+            {
+              "text": ",",
+              "data": {
+                "stime": 154120,
+                "etime": 154120,
+                "confidence": 1
+              }
+            },
+            {
+              "text": " bọn",
+              "data": {
+                "stime": 154160,
+                "etime": 154260,
+                "confidence": 1
+              }
+            },
+            {
+              "text": " mình",
+              "data": {
+                "stime": 154300,
+                "etime": 154420,
+                "confidence": 1
+              }
+            },
+            {
+              "text": " vẫn",
+              "data": {
+                "stime": 154460,
+                "etime": 154620,
+                "confidence": 1
+              }
+            },
+            {
+              "text": " sẽ",
+              "data": {
+                "stime": 154660,
+                "etime": 154760,
+                "confidence": 1
+              }
+            },
+            {
+              "text": " bảo",
+              "data": {
+                "stime": 154800,
+                "etime": 154940,
+                "confidence": 1
+              }
+            },
+            {
+              "text": " mật",
+              "data": {
+                "stime": 155020,
+                "etime": 155060,
+                "confidence": 1
+              }
+            },
+            {
+              "text": " cho",
+              "data": {
+                "stime": 155080,
+                "etime": 155200,
+                "confidence": 1
+              }
+            },
+            {
+              "text": " những",
+              "data": {
+                "stime": 155240,
+                "etime": 155360,
+                "confidence": 1
+              }
+            },
+            {
+              "text": " cái",
+              "data": {
+                "stime": 155400,
+                "etime": 155500,
+                "confidence": 1
+              }
+            },
+            {
+              "text": " người",
+              "data": {
+                "stime": 155540,
+                "etime": 155640,
+                "confidence": 1
+              }
+            },
+            {
+              "text": " dùng",
+              "data": {
+                "stime": 156060,
+                "etime": 156160,
+                "confidence": 1
+              }
+            },
+            {
+              "text": " cá",
+              "data": {
+                "stime": 156200,
+                "etime": 156480,
+                "confidence": 1
+              }
+            },
+            {
+              "text": " nhân",
+              "data": {
+                "stime": 156500,
+                "etime": 156680,
+                "confidence": 1
+              }
+            },
+            {
+              "text": " họ",
+              "data": {
+                "stime": 156700,
+                "etime": 157020,
+                "confidence": 1
+              }
+            },
+            {
+              "text": " không",
+              "data": {
+                "stime": 160720,
+                "etime": 160800,
+                "confidence": 1
+              }
+            },
+            {
+              "text": " quá",
+              "data": {
+                "stime": 160840,
+                "etime": 160959,
+                "confidence": 1
+              }
+            },
+            {
+              "text": " là",
+              "data": {
+                "stime": 161019,
+                "etime": 161100,
+                "confidence": 1
+              }
+            },
+            {
+              "text": " bao",
+              "data": {
+                "stime": 161140,
+                "etime": 161239,
+                "confidence": 1
+              }
+            },
+            {
+              "text": " nhiêu",
+              "data": {
+                "stime": 161280,
+                "etime": 161380,
+                "confidence": 1
+              }
+            },
+            {
+              "text": ",",
+              "data": {
+                "stime": 161380,
+                "etime": 161380,
+                "confidence": 1
+              }
+            },
+            {
+              "text": " phải",
+              "data": {
+                "stime": 161440,
+                "etime": 161959,
+                "confidence": 1
+              }
+            },
+            {
+              "text": " vào",
+              "data": {
+                "stime": 161440,
+                "etime": 161959,
+                "confidence": 1
+              }
+            },
+            {
+              "text": " được",
+              "data": {
+                "stime": 162500,
+                "etime": 162560,
+                "confidence": 1
+              }
+            },
+            {
+              "text": " 100",
+              "data": {
+                "stime": 162600,
+                "etime": 162700,
+                "confidence": 1
+              }
+            },
+            {
+              "text": " %",
+              "data": {
+                "stime": 162739,
+                "etime": 162780,
+                "confidence": 1
+              }
+            },
+            {
+              "text": ".",
+              "data": {
+                "stime": 162780,
+                "etime": 162780,
+                "confidence": 1
+              }
+            },
+            {
+              "text": " Tất",
+              "data": {
+                "stime": 162820,
+                "etime": 162880,
+                "confidence": 1
+              }
+            },
+            {
+              "text": " nhiên",
+              "data": {
+                "stime": 162920,
+                "etime": 163019,
+                "confidence": 1
+              }
+            },
+            {
+              "text": " là",
+              "data": {
+                "stime": 163060,
+                "etime": 163140,
+                "confidence": 1
+              }
+            },
+            {
+              "text": " mọi",
+              "data": {
+                "stime": 163180,
+                "etime": 163239,
+                "confidence": 1
+              }
+            },
+            {
+              "text": " người",
+              "data": {
+                "stime": 163280,
+                "etime": 163340,
+                "confidence": 1
+              }
+            },
+            {
+              "text": " vẫn",
+              "data": {
+                "stime": 164620,
+                "etime": 164720,
+                "confidence": 1
+              }
+            },
+            {
+              "text": " sẽ",
+              "data": {
+                "stime": 164760,
+                "etime": 165000,
+                "confidence": 1
+              }
+            },
+            {
+              "text": " là",
+              "data": {
+                "stime": 165780,
+                "etime": 165880,
+                "confidence": 1
+              }
+            },
+            {
+              "text": " phải",
+              "data": {
+                "stime": 165920,
+                "etime": 166019,
+                "confidence": 1
+              }
+            },
+            {
+              "text": " là",
+              "data": {
+                "stime": 166060,
+                "etime": 166220,
+                "confidence": 1
+              }
+            },
+            {
+              "text": " nhất",
+              "data": {
+                "stime": 166260,
+                "etime": 167040,
+                "confidence": 1
+              }
+            },
+            {
+              "text": ".",
+              "data": {
+                "stime": 167040,
+                "etime": 167040,
+                "confidence": 1
+              }
+            },
+            {
+              "text": " Đây",
+              "data": {
+                "stime": 174700,
+                "etime": 174800,
+                "confidence": 1
+              }
+            },
+            {
+              "text": " thì",
+              "data": {
+                "stime": 174840,
+                "etime": 174880,
+                "confidence": 1
+              }
+            },
+            {
+              "text": " tôi",
+              "data": {
+                "stime": 174920,
+                "etime": 175380,
+                "confidence": 1
+              }
+            },
+            {
+              "text": " bạn",
+              "data": {
+                "stime": 175560,
+                "etime": 175680,
+                "confidence": 1
+              }
+            },
+            {
+              "text": " có",
+              "data": {
+                "stime": 175720,
+                "etime": 175820,
+                "confidence": 1
+              }
+            },
+            {
+              "text": " thể",
+              "data": {
+                "stime": 175940,
+                "etime": 176040,
+                "confidence": 1
+              }
+            },
+            {
+              "text": " triển",
+              "data": {
+                "stime": 176080,
+                "etime": 176800,
+                "confidence": 1
+              }
+            },
+            {
+              "text": " khai",
+              "data": {
+                "stime": 176940,
+                "etime": 177540,
+                "confidence": 1
+              }
+            },
+            {
+              "text": " tiếp",
+              "data": {
+                "stime": 178100,
+                "etime": 178200,
+                "confidence": 1
+              }
+            },
+            {
+              "text": " được",
+              "data": {
+                "stime": 178220,
+                "etime": 178340,
+                "confidence": 1
+              }
+            },
+            {
+              "text": " trong",
+              "data": {
+                "stime": 178380,
+                "etime": 178460,
+                "confidence": 1
+              }
+            },
+            {
+              "text": " cái",
+              "data": {
+                "stime": 178380,
+                "etime": 178460,
+                "confidence": 1
+              }
+            },
+            {
+              "text": " việc",
+              "data": {
+                "stime": 178380,
+                "etime": 178460,
+                "confidence": 1
+              }
+            },
+            {
+              "text": " họ",
+              "data": {
+                "stime": 178380,
+                "etime": 178460,
+                "confidence": 1
+              }
+            }
+          ]
+        }
+      ],
+      "data": {
+        "version": null
+      },
+      "bookmarks": []
+    }
+  }
+}
