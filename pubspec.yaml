@@ -16,9 +16,11 @@ dependencies:
   linkify: ^4.0.0
   logging: ^1.0.1
   attributed_text:
-    path: ../attributed_text
+    git:
+      url: https://github.com/DinhNam99/attributed_text.git
   super_text_layout:
-    path: ../super_text_layout
+    git:
+      url: https://github.com/DinhNam99/super_text_layout.git
   uuid: ^3.0.3
 
   # Dependencies for testing tools that we ship with super_editor
