@@ -635,7 +635,6 @@ class _SingleColumnDocumentLayoutState extends State<SingleColumnDocumentLayout>
       child: Wrap(
         // mainAxisSize: MainAxisSize.min,
         // crossAxisAlignment: CrossAxisAlignment.center,
-        // direction: Axis.vertical,
         children: _buildDocComponents(),
       ),
     );

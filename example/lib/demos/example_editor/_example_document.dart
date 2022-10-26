@@ -41,7 +41,7 @@ Document createInitialDocument(c.ChildrenDocument childrenDocument) {
         id: DocumentEditor.createNodeId(),
         text: AttributedText(
           text:
-              "Super Editor is a toolkit to help you build document editors, document layouts, text fields, and more.",
+              "Super Editor is a toolkit to help you build \ndocument editors, \ndocument layouts, text fields, and more.",
         ),
       ),
       ParagraphNode(

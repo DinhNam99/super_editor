@@ -434,44 +434,48 @@ class _AndroidDocumentTouchInteractorState extends State<AndroidDocumentTouchInt
   }
 
   void _onTapUp(TapUpDetails details) {
-    editorGesturesLog.info("Tap down on document");
-    final docOffset = _getDocOffset(details.localPosition);
-    editorGesturesLog.fine(" - document offset: $docOffset");
-    final docPosition = _docLayout.getDocumentPositionNearestToOffset(docOffset);
-    editorGesturesLog.fine(" - tapped document position: $docPosition");
+    try {
+      editorGesturesLog.info("Tap down on document");
+      final docOffset = _getDocOffset(details.localPosition);
+      editorGesturesLog.fine(" - document offset: $docOffset");
+      final docPosition = _docLayout.getDocumentPositionNearestToOffset(docOffset);
+      editorGesturesLog.fine(" - tapped document position: $docPosition");
 
-    if (docPosition != null) {
-      final selection = widget.composer.selection;
-      final didTapOnExistingSelection = selection != null && selection.isCollapsed && selection.extent == docPosition;
+      if (docPosition != null) {
+        final selection = widget.composer.selection;
+        final didTapOnExistingSelection = selection != null && selection.isCollapsed && selection.extent == docPosition;
 
-      if (didTapOnExistingSelection) {
-        // Toggle the toolbar display when the user taps on the collapsed caret,
-        // or on top of an existing selection.
-        _editingController.toggleToolbar();
+        if (didTapOnExistingSelection) {
+          // Toggle the toolbar display when the user taps on the collapsed caret,
+          // or on top of an existing selection.
+          _editingController.toggleToolbar();
+        } else {
+          // The user tapped somewhere else in the document. Hide the toolbar.
+          _editingController.hideToolbar();
+        }
+
+        final tappedComponent = _docLayout.getComponentByNodeId(docPosition.nodeId)!;
+        if (!tappedComponent.isVisualSelectionSupported()) {
+          // The user tapped a non-selectable component.
+          // Place the document selection at the nearest selectable node
+          // to the tapped component.
+          widget.commonOps.moveSelectionToNearestSelectableNode(
+            widget.document.getNodeById(docPosition.nodeId)!,
+          );
+        } else {
+          // Place the document selection at the location where the
+          // user tapped.
+          _selectPosition(docPosition);
+        }
+
+        _positionToolbar();
       } else {
-        // The user tapped somewhere else in the document. Hide the toolbar.
+        _clearSelection();
+
         _editingController.hideToolbar();
       }
-
-      final tappedComponent = _docLayout.getComponentByNodeId(docPosition.nodeId)!;
-      if (!tappedComponent.isVisualSelectionSupported()) {
-        // The user tapped a non-selectable component.
-        // Place the document selection at the nearest selectable node
-        // to the tapped component.
-        widget.commonOps.moveSelectionToNearestSelectableNode(
-          widget.document.getNodeById(docPosition.nodeId)!,
-        );
-      } else {
-        // Place the document selection at the location where the
-        // user tapped.
-        _selectPosition(docPosition);
-      }
-
-      _positionToolbar();
-    } else {
-      _clearSelection();
-
-      _editingController.hideToolbar();
+    } catch (e, s) {
+      print("Edit Exp: error-$e, stack-$s");
     }
 
     widget.focusNode.requestFocus();
@@ -809,58 +813,62 @@ class _AndroidDocumentTouchInteractorState extends State<AndroidDocumentTouchInt
   }
 
   void _positionToolbar() {
-    if (!_editingController.shouldDisplayToolbar) {
-      return;
+    try {
+      if (!_editingController.shouldDisplayToolbar) {
+        return;
+      }
+
+      const toolbarGap = 24.0;
+      late Rect selectionRect;
+      Offset toolbarTopAnchor;
+      Offset toolbarBottomAnchor;
+
+      final selection = widget.composer.selection!;
+      if (selection.isCollapsed) {
+        final extentRectInDoc = _docLayout.getRectForPosition(selection.extent)!;
+        selectionRect = Rect.fromPoints(
+          _docLayout.getGlobalOffsetFromDocumentOffset(extentRectInDoc.topLeft),
+          _docLayout.getGlobalOffsetFromDocumentOffset(extentRectInDoc.bottomRight),
+        );
+      } else {
+        final baseRectInDoc = _docLayout.getRectForPosition(selection.base)!;
+        final extentRectInDoc = _docLayout.getRectForPosition(selection.extent)!;
+        final selectionRectInDoc = Rect.fromPoints(
+          Offset(
+            min(baseRectInDoc.left, extentRectInDoc.left),
+            min(baseRectInDoc.top, extentRectInDoc.top),
+          ),
+          Offset(
+            max(baseRectInDoc.right, extentRectInDoc.right),
+            max(baseRectInDoc.bottom, extentRectInDoc.bottom),
+          ),
+        );
+        selectionRect = Rect.fromPoints(
+          _docLayout.getGlobalOffsetFromDocumentOffset(selectionRectInDoc.topLeft),
+          _docLayout.getGlobalOffsetFromDocumentOffset(selectionRectInDoc.bottomRight),
+        );
+      }
+
+      // TODO: fix the horizontal placement
+      //       The logic to position the toolbar horizontally is wrong.
+      //       The toolbar should appear horizontally centered between the
+      //       left-most and right-most edge of the selection. However, the
+      //       left-most and right-most edge of the selection may not match
+      //       the handle locations. Consider the situation where multiple
+      //       lines/blocks of content are selected, but both handles sit near
+      //       the left side of the screen. This logic will position the
+      //       toolbar near the left side of the content, when the toolbar should
+      //       instead be centered across the full width of the document.
+      toolbarTopAnchor = selectionRect.topCenter - const Offset(0, toolbarGap);
+      toolbarBottomAnchor = selectionRect.bottomCenter + const Offset(0, toolbarGap);
+
+      _editingController.positionToolbar(
+        topAnchor: toolbarTopAnchor,
+        bottomAnchor: toolbarBottomAnchor,
+      );
+    }  catch (e, s) {
+      print("Edit Exp 2: error-$e, stack-$s");
     }
-
-    const toolbarGap = 24.0;
-    late Rect selectionRect;
-    Offset toolbarTopAnchor;
-    Offset toolbarBottomAnchor;
-
-    final selection = widget.composer.selection!;
-    if (selection.isCollapsed) {
-      final extentRectInDoc = _docLayout.getRectForPosition(selection.extent)!;
-      selectionRect = Rect.fromPoints(
-        _docLayout.getGlobalOffsetFromDocumentOffset(extentRectInDoc.topLeft),
-        _docLayout.getGlobalOffsetFromDocumentOffset(extentRectInDoc.bottomRight),
-      );
-    } else {
-      final baseRectInDoc = _docLayout.getRectForPosition(selection.base)!;
-      final extentRectInDoc = _docLayout.getRectForPosition(selection.extent)!;
-      final selectionRectInDoc = Rect.fromPoints(
-        Offset(
-          min(baseRectInDoc.left, extentRectInDoc.left),
-          min(baseRectInDoc.top, extentRectInDoc.top),
-        ),
-        Offset(
-          max(baseRectInDoc.right, extentRectInDoc.right),
-          max(baseRectInDoc.bottom, extentRectInDoc.bottom),
-        ),
-      );
-      selectionRect = Rect.fromPoints(
-        _docLayout.getGlobalOffsetFromDocumentOffset(selectionRectInDoc.topLeft),
-        _docLayout.getGlobalOffsetFromDocumentOffset(selectionRectInDoc.bottomRight),
-      );
-    }
-
-    // TODO: fix the horizontal placement
-    //       The logic to position the toolbar horizontally is wrong.
-    //       The toolbar should appear horizontally centered between the
-    //       left-most and right-most edge of the selection. However, the
-    //       left-most and right-most edge of the selection may not match
-    //       the handle locations. Consider the situation where multiple
-    //       lines/blocks of content are selected, but both handles sit near
-    //       the left side of the screen. This logic will position the
-    //       toolbar near the left side of the content, when the toolbar should
-    //       instead be centered across the full width of the document.
-    toolbarTopAnchor = selectionRect.topCenter - const Offset(0, toolbarGap);
-    toolbarBottomAnchor = selectionRect.bottomCenter + const Offset(0, toolbarGap);
-
-    _editingController.positionToolbar(
-      topAnchor: toolbarTopAnchor,
-      bottomAnchor: toolbarBottomAnchor,
-    );
   }
 
   void _removeEditingOverlayControls() {
@@ -897,6 +905,7 @@ class _AndroidDocumentTouchInteractorState extends State<AndroidDocumentTouchInt
   }
 
   void _selectPosition(DocumentPosition position) {
+    print("Edit Exp 3: pos-$position");
     editorGesturesLog.fine("Setting document selection to $position");
     widget.composer.selection = DocumentSelection.collapsed(
       position: position,

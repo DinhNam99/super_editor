@@ -42,6 +42,7 @@ class DocumentImeInteractor extends StatefulWidget {
     required this.softwareKeyboardHandler,
     this.hardwareKeyboardActions = const [],
     this.floatingCursorController,
+    this.onInputAction,
     required this.child,
   }) : super(key: key);
 
@@ -63,6 +64,9 @@ class DocumentImeInteractor extends StatefulWidget {
   /// stops. Otherwise, execution continues to the next [DocumentKeyboardAction].
   final List<DocumentKeyboardAction> hardwareKeyboardActions;
 
+  /// handle input action
+  final Function(TextInputAction action)? onInputAction;
+
   final FloatingCursorController? floatingCursorController;
 
   final Widget child;
@@ -71,7 +75,8 @@ class DocumentImeInteractor extends StatefulWidget {
   State createState() => _DocumentImeInteractorState();
 }
 
-class _DocumentImeInteractorState extends State<DocumentImeInteractor> implements DeltaTextInputClient, ImeInputOwner {
+class _DocumentImeInteractorState extends State<DocumentImeInteractor>
+    implements DeltaTextInputClient, ImeInputOwner {
   late FocusNode _focusNode;
 
   TextInputConnection? _inputConnection;
@@ -82,8 +87,10 @@ class _DocumentImeInteractorState extends State<DocumentImeInteractor> implement
 
     _focusNode = (widget.focusNode ?? FocusNode())..addListener(_onFocusChange);
 
-    widget.editContext.composer.selectionNotifier.addListener(_onComposerChange);
-    widget.editContext.composer.imeConfiguration.addListener(_onClientWantsDifferentImeConfiguration);
+    widget.editContext.composer.selectionNotifier
+        .addListener(_onComposerChange);
+    widget.editContext.composer.imeConfiguration
+        .addListener(_onClientWantsDifferentImeConfiguration);
   }
 
   @override
@@ -92,16 +99,23 @@ class _DocumentImeInteractorState extends State<DocumentImeInteractor> implement
 
     if (widget.focusNode != oldWidget.focusNode) {
       _focusNode.removeListener(_onFocusChange);
-      _focusNode = (widget.focusNode ?? FocusNode())..addListener(_onFocusChange);
+      _focusNode = (widget.focusNode ?? FocusNode())
+        ..addListener(_onFocusChange);
     }
 
-    if (widget.editContext.composer.selectionNotifier != oldWidget.editContext.composer.selectionNotifier) {
-      oldWidget.editContext.composer.selectionNotifier.removeListener(_onComposerChange);
-      widget.editContext.composer.selectionNotifier.addListener(_onComposerChange);
+    if (widget.editContext.composer.selectionNotifier !=
+        oldWidget.editContext.composer.selectionNotifier) {
+      oldWidget.editContext.composer.selectionNotifier
+          .removeListener(_onComposerChange);
+      widget.editContext.composer.selectionNotifier
+          .addListener(_onComposerChange);
     }
-    if (widget.editContext.composer.imeConfiguration != oldWidget.editContext.composer.imeConfiguration) {
-      oldWidget.editContext.composer.imeConfiguration.removeListener(_onClientWantsDifferentImeConfiguration);
-      oldWidget.editContext.composer.imeConfiguration.addListener(_onClientWantsDifferentImeConfiguration);
+    if (widget.editContext.composer.imeConfiguration !=
+        oldWidget.editContext.composer.imeConfiguration) {
+      oldWidget.editContext.composer.imeConfiguration
+          .removeListener(_onClientWantsDifferentImeConfiguration);
+      oldWidget.editContext.composer.imeConfiguration
+          .addListener(_onClientWantsDifferentImeConfiguration);
     }
   }
 
@@ -109,8 +123,10 @@ class _DocumentImeInteractorState extends State<DocumentImeInteractor> implement
   void dispose() {
     _detachFromIme();
 
-    widget.editContext.composer.imeConfiguration.removeListener(_onClientWantsDifferentImeConfiguration);
-    widget.editContext.composer.selectionNotifier.removeListener(_onComposerChange);
+    widget.editContext.composer.imeConfiguration
+        .removeListener(_onClientWantsDifferentImeConfiguration);
+    widget.editContext.composer.selectionNotifier
+        .removeListener(_onComposerChange);
 
     if (widget.focusNode == null) {
       _focusNode.dispose();
@@ -134,7 +150,8 @@ class _DocumentImeInteractorState extends State<DocumentImeInteractor> implement
 
   void _onComposerChange() {
     final selection = widget.editContext.composer.selection;
-    editorImeLog.info("Document composer (${widget.editContext.composer.hashCode}) changed. New selection: $selection");
+    editorImeLog.info(
+        "Document composer (${widget.editContext.composer.hashCode}) changed. New selection: $selection");
 
     if (selection == null) {
       _detachFromIme();
@@ -184,7 +201,8 @@ class _DocumentImeInteractorState extends State<DocumentImeInteractor> implement
       ..show()
       ..setEditingState(currentTextEditingValue);
 
-    editorImeLog.fine('Is attached to input client? ${_inputConnection!.attached}');
+    editorImeLog
+        .fine('Is attached to input client? ${_inputConnection!.attached}');
   }
 
   TextInputConfiguration _createInputConfiguration() {
@@ -197,7 +215,8 @@ class _DocumentImeInteractorState extends State<DocumentImeInteractor> implement
       autocorrect: imeConfig.enableAutocorrect,
       enableSuggestions: imeConfig.enableSuggestions,
       inputAction: imeConfig.keyboardActionButton,
-      keyboardAppearance: imeConfig.keyboardBrightness ?? MediaQuery.of(context).platformBrightness,
+      keyboardAppearance: imeConfig.keyboardBrightness ??
+          MediaQuery.of(context).platformBrightness,
     );
   }
 
@@ -222,16 +241,20 @@ class _DocumentImeInteractorState extends State<DocumentImeInteractor> implement
   TextEditingValue _currentTextEditingValue = const TextEditingValue();
   DocumentImeSerializer? _currentImeSerialization;
   TextEditingValue? _lastTextEditingValueSentToOs;
+
   set currentTextEditingValue(TextEditingValue newValue) {
     _currentTextEditingValue = newValue;
     if (newValue != _lastTextEditingValueSentToOs && !_isApplyingDeltas) {
-      editorImeLog.info("Sending new text editing value to OS: $_currentTextEditingValue");
+      editorImeLog.info(
+          "Sending new text editing value to OS: $_currentTextEditingValue");
       _inputConnection?.setEditingState(_currentTextEditingValue);
       _lastTextEditingValueSentToOs = _currentTextEditingValue;
     } else if (_isApplyingDeltas) {
-      editorImeLog.fine("Ignoring new TextEditingValue because we're applying deltas");
+      editorImeLog
+          .fine("Ignoring new TextEditingValue because we're applying deltas");
     } else {
-      editorImeLog.fine("Ignoring new TextEditingValue because it's the same as the existing one: $newValue");
+      editorImeLog.fine(
+          "Ignoring new TextEditingValue because it's the same as the existing one: $newValue");
     }
   }
 
@@ -240,17 +263,21 @@ class _DocumentImeInteractorState extends State<DocumentImeInteractor> implement
   void _syncImeWithDocumentAndComposer([TextRange? newComposingRegion]) {
     final selection = widget.editContext.composer.selection;
     if (selection != null) {
-      editorImeLog.fine("Syncing IME with Doc and Composer, given composing region: $newComposingRegion");
+      editorImeLog.fine(
+          "Syncing IME with Doc and Composer, given composing region: $newComposingRegion");
 
       final newDocSerialization = DocumentImeSerializer(
         widget.editContext.editor.document,
         selection,
       );
 
-      editorImeLog.fine("Previous doc serialization did prepend? ${_currentImeSerialization?.didPrependPlaceholder}");
+      editorImeLog.fine(
+          "Previous doc serialization did prepend? ${_currentImeSerialization?.didPrependPlaceholder}");
       editorImeLog.fine("Desired composing region: $newComposingRegion");
-      editorImeLog.fine("Did new doc prepend placeholder? ${newDocSerialization.didPrependPlaceholder}");
-      TextRange composingRegion = newComposingRegion ?? currentTextEditingValue.composing;
+      editorImeLog.fine(
+          "Did new doc prepend placeholder? ${newDocSerialization.didPrependPlaceholder}");
+      TextRange composingRegion =
+          newComposingRegion ?? currentTextEditingValue.composing;
       if (_currentImeSerialization != null &&
           _currentImeSerialization!.didPrependPlaceholder &&
           composingRegion.isValid &&
@@ -265,7 +292,9 @@ class _DocumentImeInteractorState extends State<DocumentImeInteractor> implement
       }
 
       _currentImeSerialization = newDocSerialization;
-      currentTextEditingValue = newDocSerialization.toTextEditingValue().copyWith(composing: composingRegion);
+      currentTextEditingValue = newDocSerialization
+          .toTextEditingValue()
+          .copyWith(composing: composingRegion);
     }
   }
 
@@ -279,26 +308,33 @@ class _DocumentImeInteractorState extends State<DocumentImeInteractor> implement
 
   @override
   void updateEditingValueWithDeltas(List<TextEditingDelta> textEditingDeltas) {
-    editorImeLog.info("Received edit deltas from platform: ${textEditingDeltas.length} deltas");
+    editorImeLog.info(
+        "Received edit deltas from platform: ${textEditingDeltas.length} deltas");
     for (final delta in textEditingDeltas) {
       editorImeLog.info("$delta");
     }
 
     final imeValueBeforeChange = currentTextEditingValue;
-    editorImeLog.fine("IME value before applying deltas: $imeValueBeforeChange");
+    editorImeLog
+        .fine("IME value before applying deltas: $imeValueBeforeChange");
 
     _isApplyingDeltas = true;
     widget.softwareKeyboardHandler.applyDeltas(textEditingDeltas);
     _isApplyingDeltas = false;
 
-    editorImeLog.fine("Done applying deltas. Serializing the document and sending to IME.");
+    editorImeLog.fine(
+        "Done applying deltas. Serializing the document and sending to IME.");
     _syncImeWithDocumentAndComposer(textEditingDeltas.last.composing);
 
-    editorImeLog.fine("IME value after applying deltas: $currentTextEditingValue");
+    editorImeLog
+        .fine("IME value after applying deltas: $currentTextEditingValue");
 
-    final hasDestructiveUpdate =
-        textEditingDeltas.where((element) => element is! TextEditingDeltaNonTextUpdate).toList().isNotEmpty;
-    if (hasDestructiveUpdate && imeValueBeforeChange == currentTextEditingValue) {
+    final hasDestructiveUpdate = textEditingDeltas
+        .where((element) => element is! TextEditingDeltaNonTextUpdate)
+        .toList()
+        .isNotEmpty;
+    if (hasDestructiveUpdate &&
+        imeValueBeforeChange == currentTextEditingValue) {
       // Sometimes the IME reports changes to us, but our document doesn't change
       // in ways that's reflected in the IME. In this case, we need to "reset"
       // the IME value to what it was before the deltas.
@@ -331,6 +367,7 @@ class _DocumentImeInteractorState extends State<DocumentImeInteractor> implement
   @override
   void performAction(TextInputAction action) {
     editorImeLog.fine("IME says to perform action: $action");
+    if (widget.onInputAction != null) widget.onInputAction!(action);
     widget.softwareKeyboardHandler.performAction(action);
   }
 
@@ -380,14 +417,16 @@ class _DocumentImeInteractorState extends State<DocumentImeInteractor> implement
 
   KeyEventResult _onKeyPressed(FocusNode node, RawKeyEvent keyEvent) {
     if (keyEvent is! RawKeyDownEvent) {
-      editorKeyLog.finer("Received key event, but ignoring because it's not a down event: $keyEvent");
+      editorKeyLog.finer(
+          "Received key event, but ignoring because it's not a down event: $keyEvent");
       return KeyEventResult.handled;
     }
 
     editorKeyLog.info("Handling key press: $keyEvent");
     ExecutionInstruction instruction = ExecutionInstruction.continueExecution;
     int index = 0;
-    while (instruction == ExecutionInstruction.continueExecution && index < widget.hardwareKeyboardActions.length) {
+    while (instruction == ExecutionInstruction.continueExecution &&
+        index < widget.hardwareKeyboardActions.length) {
       instruction = widget.hardwareKeyboardActions[index](
         editContext: widget.editContext,
         keyEvent: keyEvent,
@@ -469,7 +508,8 @@ class DocumentImeSerializer {
         buffer.write('~');
         characterCount += 1;
 
-        final imeRange = TextRange(start: characterCount - 1, end: characterCount);
+        final imeRange =
+            TextRange(start: characterCount - 1, end: characterCount);
         _imeRangesToDocTextNodes[imeRange] = node.id;
         _docTextNodesToImeRanges[node.id] = imeRange;
 
@@ -478,7 +518,8 @@ class DocumentImeSerializer {
 
       // Cache mappings between the IME text range and the document position
       // so that we can easily convert between the two, when requested.
-      final imeRange = TextRange(start: characterCount, end: characterCount + node.text.text.length);
+      final imeRange = TextRange(
+          start: characterCount, end: characterCount + node.text.text.length);
       _imeRangesToDocTextNodes[imeRange] = node.id;
       _docTextNodesToImeRanges[node.id] = imeRange;
 
@@ -507,29 +548,37 @@ class DocumentImeSerializer {
   bool get didPrependPlaceholder => _prependedPlaceholder.isNotEmpty;
 
   DocumentSelection? imeToDocumentSelection(TextSelection imeSelection) {
-    editorImeLog.fine("Creating doc selection from IME selection: $imeSelection");
+    editorImeLog
+        .fine("Creating doc selection from IME selection: $imeSelection");
     if (didPrependPlaceholder &&
-        ((!imeSelection.isCollapsed && imeSelection.start < _prependedPlaceholder.length) ||
-            (imeSelection.isCollapsed && imeSelection.extentOffset <= _prependedPlaceholder.length))) {
+        ((!imeSelection.isCollapsed &&
+                imeSelection.start < _prependedPlaceholder.length) ||
+            (imeSelection.isCollapsed &&
+                imeSelection.extentOffset <= _prependedPlaceholder.length))) {
       // The IME is trying to select our artificial prepended character.
       // If that's the only character that the IME is trying to select, then
       // return a null selection to indicate that there's nothing to select.
       // If the selection is expanded, then remove the arbitrary character from
       // the selection.
-      if ((imeSelection.isCollapsed && imeSelection.extentOffset < _prependedPlaceholder.length) ||
-          (imeSelection.start < _prependedPlaceholder.length && imeSelection.end == _prependedPlaceholder.length)) {
+      if ((imeSelection.isCollapsed &&
+              imeSelection.extentOffset < _prependedPlaceholder.length) ||
+          (imeSelection.start < _prependedPlaceholder.length &&
+              imeSelection.end == _prependedPlaceholder.length)) {
         editorImeLog.fine("Returning null doc selection");
         return null;
       } else {
         editorImeLog.fine("Removing arbitrary character from IME selection");
         imeSelection = imeSelection.copyWith(
-          baseOffset: min(imeSelection.baseOffset, _prependedPlaceholder.length),
-          extentOffset: min(imeSelection.extentOffset, _prependedPlaceholder.length),
+          baseOffset:
+              min(imeSelection.baseOffset, _prependedPlaceholder.length),
+          extentOffset:
+              min(imeSelection.extentOffset, _prependedPlaceholder.length),
         );
         editorImeLog.fine("Adjusted IME selection is: $imeSelection");
       }
     } else {
-      editorImeLog.fine("Mapping the IME base/extent to their corresponding doc positions without modification.");
+      editorImeLog.fine(
+          "Mapping the IME base/extent to their corresponding doc positions without modification.");
     }
 
     return DocumentSelection(
@@ -544,15 +593,18 @@ class DocumentImeSerializer {
     );
   }
 
-  DocumentPosition _imeToDocumentPosition(TextPosition imePosition, {required bool isUpstream}) {
+  DocumentPosition _imeToDocumentPosition(TextPosition imePosition,
+      {required bool isUpstream}) {
     for (final range in _imeRangesToDocTextNodes.keys) {
-      if (imePosition.offset >= range.start && imePosition.offset <= range.end) {
+      if (imePosition.offset >= range.start &&
+          imePosition.offset <= range.end) {
         final node = _doc.getNodeById(_imeRangesToDocTextNodes[range]!)!;
 
         if (node is TextNode) {
           return DocumentPosition(
             nodeId: _imeRangesToDocTextNodes[range]!,
-            nodePosition: TextNodePosition(offset: imePosition.offset - range.start),
+            nodePosition:
+                TextNodePosition(offset: imePosition.offset - range.start),
           );
         } else {
           if (imePosition.offset <= range.start) {
@@ -574,17 +626,23 @@ class DocumentImeSerializer {
 
     editorImeLog.shout(
         "Couldn't map an IME position to a document position. IME position: $imePosition. The selected offset range is: ${_imeRangesToDocTextNodes.keys.last.start} -> ${_imeRangesToDocTextNodes.keys.last.end}");
-    throw Exception("Couldn't map an IME position to a document position. IME position: $imePosition");
+    throw Exception(
+        "Couldn't map an IME position to a document position. IME position: $imePosition");
   }
 
   TextSelection documentToImeSelection(DocumentSelection docSelection) {
-    editorImeLog.fine("Converting doc selection to ime selection: $docSelection");
+    editorImeLog
+        .fine("Converting doc selection to ime selection: $docSelection");
     final selectionAffinity = _doc.getAffinityForSelection(docSelection);
 
-    final startDocPosition = selectionAffinity == TextAffinity.downstream ? docSelection.base : docSelection.extent;
+    final startDocPosition = selectionAffinity == TextAffinity.downstream
+        ? docSelection.base
+        : docSelection.extent;
     final startImePosition = _documentToImePosition(startDocPosition);
 
-    final endDocPosition = selectionAffinity == TextAffinity.downstream ? docSelection.extent : docSelection.base;
+    final endDocPosition = selectionAffinity == TextAffinity.downstream
+        ? docSelection.extent
+        : docSelection.base;
     final endImePosition = _documentToImePosition(endDocPosition);
 
     editorImeLog.fine("Start IME position: $startImePosition");
@@ -592,27 +650,33 @@ class DocumentImeSerializer {
     return TextSelection(
       baseOffset: startImePosition.offset,
       extentOffset: endImePosition.offset,
-      affinity: startImePosition == endImePosition ? endImePosition.affinity : TextAffinity.downstream,
+      affinity: startImePosition == endImePosition
+          ? endImePosition.affinity
+          : TextAffinity.downstream,
     );
   }
 
   TextPosition _documentToImePosition(DocumentPosition docPosition) {
-    editorImeLog.fine("Converting DocumentPosition to IME TextPosition: $docPosition");
+    editorImeLog
+        .fine("Converting DocumentPosition to IME TextPosition: $docPosition");
     final imeRange = _docTextNodesToImeRanges[docPosition.nodeId];
     if (imeRange == null) {
-      throw Exception("No such document position in the IME content: $docPosition");
+      throw Exception(
+          "No such document position in the IME content: $docPosition");
     }
 
     final nodePosition = docPosition.nodePosition;
 
     if (nodePosition is UpstreamDownstreamNodePosition) {
       if (nodePosition.affinity == TextAffinity.upstream) {
-        editorImeLog.fine("The doc position is an upstream position on a block.");
+        editorImeLog
+            .fine("The doc position is an upstream position on a block.");
         // Return the text position before the special character,
         // e.g., "|~".
         return TextPosition(offset: imeRange.start);
       } else {
-        editorImeLog.fine("The doc position is a downstream position on a block.");
+        editorImeLog
+            .fine("The doc position is a downstream position on a block.");
         // Return the text position after the special character,
         // e.g., "~|".
         return TextPosition(offset: imeRange.start + 1);
@@ -620,14 +684,18 @@ class DocumentImeSerializer {
     }
 
     if (nodePosition is TextNodePosition) {
-      return TextPosition(offset: imeRange.start + (docPosition.nodePosition as TextNodePosition).offset);
+      return TextPosition(
+          offset: imeRange.start +
+              (docPosition.nodePosition as TextNodePosition).offset);
     }
 
-    throw Exception("Super Editor doesn't know how to convert a $nodePosition into an IME-compatible selection");
+    throw Exception(
+        "Super Editor doesn't know how to convert a $nodePosition into an IME-compatible selection");
   }
 
   TextEditingValue toTextEditingValue() {
-    editorImeLog.fine("Creating TextEditingValue from document. Selection: $_selection");
+    editorImeLog.fine(
+        "Creating TextEditingValue from document. Selection: $_selection");
     editorImeLog.fine("Text:\n'$_imeText'");
     final imeSelection = documentToImeSelection(_selection);
     editorImeLog.fine("Selection: $imeSelection");
@@ -645,7 +713,8 @@ class DocumentImeSerializer {
   /// then those same end-caps are retained in the returned `DocumentSelection`.
   ///
   /// If there is no text content within the [selection], `null` is returned.
-  DocumentSelection? _constrictToTextSelectionEndCaps(DocumentSelection selection) {
+  DocumentSelection? _constrictToTextSelectionEndCaps(
+      DocumentSelection selection) {
     final baseNode = _doc.getNodeById(selection.base.nodeId)!;
     final baseNodeIndex = _doc.getNodeIndex(baseNode);
     final extentNode = _doc.getNodeById(selection.extent.nodeId)!;
@@ -653,11 +722,14 @@ class DocumentImeSerializer {
 
     final startNode = baseNodeIndex <= extentNodeIndex ? baseNode : extentNode;
     final startNodeIndex = _doc.getNodeIndex(startNode);
-    final startPosition =
-        baseNodeIndex <= extentNodeIndex ? selection.base.nodePosition : selection.extent.nodePosition;
+    final startPosition = baseNodeIndex <= extentNodeIndex
+        ? selection.base.nodePosition
+        : selection.extent.nodePosition;
     final endNode = baseNodeIndex <= extentNodeIndex ? extentNode : baseNode;
     final endNodeIndex = _doc.getNodeIndex(endNode);
-    final endPosition = baseNodeIndex <= extentNodeIndex ? selection.extent.nodePosition : selection.base.nodePosition;
+    final endPosition = baseNodeIndex <= extentNodeIndex
+        ? selection.extent.nodePosition
+        : selection.base.nodePosition;
 
     if (startNodeIndex == endNodeIndex) {
       // The document selection is all in one node.
@@ -678,7 +750,8 @@ class DocumentImeSerializer {
       restrictedStartPosition = startPosition as TextNodePosition;
     } else {
       int restrictedStartNodeIndex = startNodeIndex + 1;
-      while (_doc.getNodeAt(restrictedStartNodeIndex) is! TextNode && restrictedStartNodeIndex <= endNodeIndex) {
+      while (_doc.getNodeAt(restrictedStartNodeIndex) is! TextNode &&
+          restrictedStartNodeIndex <= endNodeIndex) {
         restrictedStartNodeIndex += 1;
       }
 
@@ -695,13 +768,15 @@ class DocumentImeSerializer {
       restrictedEndPosition = endPosition as TextNodePosition;
     } else {
       int restrictedEndNodeIndex = endNodeIndex - 1;
-      while (_doc.getNodeAt(restrictedEndNodeIndex) is! TextNode && restrictedEndNodeIndex >= startNodeIndex) {
+      while (_doc.getNodeAt(restrictedEndNodeIndex) is! TextNode &&
+          restrictedEndNodeIndex >= startNodeIndex) {
         restrictedEndNodeIndex -= 1;
       }
 
       if (_doc.getNodeAt(restrictedEndNodeIndex) is TextNode) {
         restrictedEndNode = _doc.getNodeAt(restrictedEndNodeIndex);
-        restrictedEndPosition = TextNodePosition(offset: (restrictedEndNode as TextNode).text.text.length);
+        restrictedEndPosition = TextNodePosition(
+            offset: (restrictedEndNode as TextNode).text.text.length);
       }
     }
 
@@ -735,11 +810,13 @@ class DocumentImeSerializer {
     final extentNode = _doc.getNodeById(selection.extent.nodeId)!;
     final extentNodeIndex = _doc.getNodeIndex(extentNode);
 
-    final selectionStartNode = baseNodeIndex <= extentNodeIndex ? baseNode : extentNode;
+    final selectionStartNode =
+        baseNodeIndex <= extentNodeIndex ? baseNode : extentNode;
     final selectionStartNodeIndex = _doc.getNodeIndex(selectionStartNode);
     final startNodeIndex = max(selectionStartNodeIndex - 1, 0);
 
-    final selectionEndNode = baseNodeIndex <= extentNodeIndex ? extentNode : baseNode;
+    final selectionEndNode =
+        baseNodeIndex <= extentNodeIndex ? extentNode : baseNode;
     final selectionEndNodeIndex = _doc.getNodeIndex(selectionEndNode);
     final endNodeIndex = min(selectionEndNodeIndex + 1, _doc.nodes.length - 1);
 
@@ -837,7 +914,8 @@ class SoftwareKeyboardHandler {
 
   /// Applies the given [textEditingDeltas] to the [Document].
   void applyDeltas(List<TextEditingDelta> textEditingDeltas) {
-    editorImeLog.info("Applying ${textEditingDeltas.length} IME deltas to document");
+    editorImeLog
+        .info("Applying ${textEditingDeltas.length} IME deltas to document");
 
     for (final delta in textEditingDeltas) {
       editorImeLog.info("Applying delta: $delta");
@@ -867,7 +945,8 @@ class SoftwareKeyboardHandler {
       // On Android and web, newlines are only reported here. So, on Android and web,
       // we forward the newline action to performAction.
       if (defaultTargetPlatform == TargetPlatform.android || kIsWeb) {
-        editorImeLog.fine("Received a newline insertion on Android. Forwarding to newline input action.");
+        editorImeLog.fine(
+            "Received a newline insertion on Android. Forwarding to newline input action.");
         performAction(TextInputAction.newline);
       } else {
         editorImeLog.fine("Skipping insertion delta because its a newline");
@@ -875,7 +954,8 @@ class SoftwareKeyboardHandler {
       return;
     }
 
-    if (delta.textInserted == "\t" && (defaultTargetPlatform == TargetPlatform.iOS)) {
+    if (delta.textInserted == "\t" &&
+        (defaultTargetPlatform == TargetPlatform.iOS)) {
       // On iOS, tabs pressed at the the software keyboard are reported here.
       commonOps.indentListItem();
       return;
@@ -885,7 +965,8 @@ class SoftwareKeyboardHandler {
         "Inserting text: ${delta.textInserted}, insertion offset: ${delta.insertionOffset}, ime selection: ${delta.selection}");
 
     insert(
-      TextPosition(offset: delta.insertionOffset, affinity: delta.selection.affinity),
+      TextPosition(
+          offset: delta.insertionOffset, affinity: delta.selection.affinity),
       delta.textInserted,
     );
   }
@@ -903,7 +984,8 @@ class SoftwareKeyboardHandler {
       // On Android and web, newlines are only reported here. So, on Android and web,
       // we forward the newline action to performAction.
       if (defaultTargetPlatform == TargetPlatform.android || kIsWeb) {
-        editorImeLog.fine("Received a newline replacement on Android. Forwarding to newline input action.");
+        editorImeLog.fine(
+            "Received a newline replacement on Android. Forwarding to newline input action.");
         performAction(TextInputAction.newline);
       } else {
         editorImeLog.fine("Skipping replacement delta because its a newline");
@@ -911,7 +993,8 @@ class SoftwareKeyboardHandler {
       return;
     }
 
-    if (delta.replacementText == "\t" && (defaultTargetPlatform == TargetPlatform.iOS)) {
+    if (delta.replacementText == "\t" &&
+        (defaultTargetPlatform == TargetPlatform.iOS)) {
       // On iOS, tabs pressed at the the software keyboard are reported here.
       commonOps.indentListItem();
       return;
@@ -948,27 +1031,31 @@ class SoftwareKeyboardHandler {
       return;
     }
 
-    editorImeLog.fine('Inserting "$textInserted" at position "$insertionPosition"');
+    editorImeLog
+        .fine('Inserting "$textInserted" at position "$insertionPosition"');
     editorImeLog.fine("Serializing document to perform IME operation");
     final docSerializer = DocumentImeSerializer(
       editor.document,
       composer.selection!,
     );
-    editorImeLog.fine("Converting IME insertion offset into a DocumentSelection");
+    editorImeLog
+        .fine("Converting IME insertion offset into a DocumentSelection");
     final insertionSelection = docSerializer.imeToDocumentSelection(
       TextSelection.fromPosition(insertionPosition),
     );
-    editorImeLog
-        .fine("Updating the Document Composer's selection to place caret at insertion offset:\n$insertionSelection");
+    editorImeLog.fine(
+        "Updating the Document Composer's selection to place caret at insertion offset:\n$insertionSelection");
     final selectionBeforeInsertion = composer.selection;
     composer.selection = insertionSelection;
 
-    editorImeLog.fine("Inserting the text at the Document Composer's selection");
+    editorImeLog
+        .fine("Inserting the text at the Document Composer's selection");
     final didInsert = commonOps.insertPlainText(textInserted);
     editorImeLog.fine("Insertion successful? $didInsert");
 
     if (!didInsert) {
-      editorImeLog.fine("Failed to insert characters. Restoring previous selection.");
+      editorImeLog
+          .fine("Failed to insert characters. Restoring previous selection.");
       composer.selection = selectionBeforeInsertion;
     }
 
@@ -983,7 +1070,8 @@ class SoftwareKeyboardHandler {
       composer.selection!,
     );
 
-    final replacementSelection = docSerializer.imeToDocumentSelection(TextSelection(
+    final replacementSelection =
+        docSerializer.imeToDocumentSelection(TextSelection(
       baseOffset: replacedRange.start,
       // TODO: the delta API is wrong for TextRange.end, it should be exclusive,
       //       but it's implemented as inclusive. Change this code when Flutter
@@ -1015,7 +1103,8 @@ class SoftwareKeyboardHandler {
       editor.document,
       composer.selection!,
     );
-    final docSelectionToDelete = docSerializer.imeToDocumentSelection(TextSelection(
+    DocumentSelection? docSelectionToDelete =
+        docSerializer.imeToDocumentSelection(TextSelection(
       baseOffset: rangeToDelete.start,
       extentOffset: rangeToDelete.end,
     ));
@@ -1025,16 +1114,22 @@ class SoftwareKeyboardHandler {
       final selectedNodeIndex = editor.document.getNodeIndexById(
         composer.selection!.extent.nodeId,
       );
-      if (selectedNodeIndex > 0) {
-        // The user is trying to delete upstream at the start of a node.
-        // This action requires intervention because the IME doesn't know
-        // that there's more content before this node. Instruct the editor
-        // to run a delete action upstream, which will take the desired
-        // "backspace" behavior at the start of this node.
-        commonOps.deleteUpstream();
-        editorImeLog.fine("Deleted upstream. New selection: ${composer.selection}");
-        return;
-      }
+
+      final node = editor.document.getNodeAt(selectedNodeIndex - 1)!;
+
+      DocumentSelection documentSelection = composer.selection!.copyWith(
+          base: DocumentPosition(
+            nodeId: node.id,
+            nodePosition: TextNodePosition(
+                offset: (node.endPosition as TextNodePosition).offset - 1),
+          ),
+          extent: DocumentPosition(
+            nodeId: node.id,
+            nodePosition: TextNodePosition(
+                offset: (node.endPosition as TextNodePosition).offset),
+          ));
+
+      docSelectionToDelete = documentSelection;
     }
 
     editorImeLog.fine("Running selection deletion operation");
@@ -1091,16 +1186,24 @@ class KeyboardEditingToolbar extends StatelessWidget {
   final Brightness? brightness;
 
   bool get _isBoldActive => _doesSelectionHaveAttributions({boldAttribution});
+
   void _toggleBold() => _toggleAttributions({boldAttribution});
 
-  bool get _isItalicsActive => _doesSelectionHaveAttributions({italicsAttribution});
+  bool get _isItalicsActive =>
+      _doesSelectionHaveAttributions({italicsAttribution});
+
   void _toggleItalics() => _toggleAttributions({italicsAttribution});
 
-  bool get _isUnderlineActive => _doesSelectionHaveAttributions({underlineAttribution});
+  bool get _isUnderlineActive =>
+      _doesSelectionHaveAttributions({underlineAttribution});
+
   void _toggleUnderline() => _toggleAttributions({underlineAttribution});
 
-  bool get _isStrikethroughActive => _doesSelectionHaveAttributions({strikethroughAttribution});
-  void _toggleStrikethrough() => _toggleAttributions({strikethroughAttribution});
+  bool get _isStrikethroughActive =>
+      _doesSelectionHaveAttributions({strikethroughAttribution});
+
+  void _toggleStrikethrough() =>
+      _toggleAttributions({strikethroughAttribution});
 
   bool _doesSelectionHaveAttributions(Set<Attribution> attributions) {
     final selection = composer.selection;
@@ -1112,7 +1215,8 @@ class KeyboardEditingToolbar extends StatelessWidget {
       return composer.preferences.currentAttributions.containsAll(attributions);
     }
 
-    return document.doesSelectedTextContainAttributions(selection, attributions);
+    return document.doesSelectedTextContainAttributions(
+        selection, attributions);
   }
 
   void _toggleAttributions(Set<Attribution> attributions) {
@@ -1127,7 +1231,8 @@ class KeyboardEditingToolbar extends StatelessWidget {
   }
 
   void _convertToHeader1() {
-    final selectedNode = document.getNodeById(composer.selection!.extent.nodeId);
+    final selectedNode =
+        document.getNodeById(composer.selection!.extent.nodeId);
     if (selectedNode is! TextNode) {
       return;
     }
@@ -1144,7 +1249,8 @@ class KeyboardEditingToolbar extends StatelessWidget {
   }
 
   void _convertToHeader2() {
-    final selectedNode = document.getNodeById(composer.selection!.extent.nodeId);
+    final selectedNode =
+        document.getNodeById(composer.selection!.extent.nodeId);
     if (selectedNode is! TextNode) {
       return;
     }
@@ -1165,25 +1271,29 @@ class KeyboardEditingToolbar extends StatelessWidget {
   }
 
   void _convertToOrderedListItem() {
-    final selectedNode = document.getNodeById(composer.selection!.extent.nodeId)! as TextNode;
+    final selectedNode =
+        document.getNodeById(composer.selection!.extent.nodeId)! as TextNode;
 
     commonOps.convertToListItem(ListItemType.ordered, selectedNode.text);
   }
 
   void _convertToUnorderedListItem() {
-    final selectedNode = document.getNodeById(composer.selection!.extent.nodeId)! as TextNode;
+    final selectedNode =
+        document.getNodeById(composer.selection!.extent.nodeId)! as TextNode;
 
     commonOps.convertToListItem(ListItemType.unordered, selectedNode.text);
   }
 
   void _convertToBlockquote() {
-    final selectedNode = document.getNodeById(composer.selection!.extent.nodeId)! as TextNode;
+    final selectedNode =
+        document.getNodeById(composer.selection!.extent.nodeId)! as TextNode;
 
     commonOps.convertToBlockquote(selectedNode.text);
   }
 
   void _convertToHr() {
-    final selectedNode = document.getNodeById(composer.selection!.extent.nodeId)! as TextNode;
+    final selectedNode =
+        document.getNodeById(composer.selection!.extent.nodeId)! as TextNode;
 
     selectedNode.text = AttributedText(text: '--- ');
     composer.selection = DocumentSelection.collapsed(
@@ -1207,12 +1317,15 @@ class KeyboardEditingToolbar extends StatelessWidget {
       return const SizedBox();
     }
 
-    final brightness = this.brightness ?? MediaQuery.of(context).platformBrightness;
+    final brightness =
+        this.brightness ?? MediaQuery.of(context).platformBrightness;
 
     return Theme(
       data: Theme.of(context).copyWith(
         brightness: brightness,
-        disabledColor: brightness == Brightness.light ? Colors.black.withOpacity(0.5) : Colors.white.withOpacity(0.5),
+        disabledColor: brightness == Brightness.light
+            ? Colors.black.withOpacity(0.5)
+            : Colors.white.withOpacity(0.5),
       ),
       child: IconTheme(
         data: IconThemeData(
@@ -1222,7 +1335,9 @@ class KeyboardEditingToolbar extends StatelessWidget {
           child: Container(
             width: double.infinity,
             height: 48,
-            color: brightness == Brightness.light ? const Color(0xFFDDDDDD) : const Color(0xFF222222),
+            color: brightness == Brightness.light
+                ? const Color(0xFFDDDDDD)
+                : const Color(0xFF222222),
             child: Row(
               children: [
                 Expanded(
@@ -1231,36 +1346,56 @@ class KeyboardEditingToolbar extends StatelessWidget {
                     child: ListenableBuilder(
                         listenable: composer,
                         builder: (context) {
-                          final selectedNode = document.getNodeById(selection.extent.nodeId);
-                          final isSingleNodeSelected = selection.extent.nodeId == selection.base.nodeId;
+                          final selectedNode =
+                              document.getNodeById(selection.extent.nodeId);
+                          final isSingleNodeSelected =
+                              selection.extent.nodeId == selection.base.nodeId;
 
                           return Row(
                             mainAxisSize: MainAxisSize.min,
                             children: [
                               IconButton(
-                                onPressed: selectedNode is TextNode ? _toggleBold : null,
+                                onPressed: selectedNode is TextNode
+                                    ? _toggleBold
+                                    : null,
                                 icon: const Icon(Icons.format_bold),
-                                color: _isBoldActive ? Theme.of(context).primaryColor : null,
+                                color: _isBoldActive
+                                    ? Theme.of(context).primaryColor
+                                    : null,
                               ),
                               IconButton(
-                                onPressed: selectedNode is TextNode ? _toggleItalics : null,
+                                onPressed: selectedNode is TextNode
+                                    ? _toggleItalics
+                                    : null,
                                 icon: const Icon(Icons.format_italic),
-                                color: _isItalicsActive ? Theme.of(context).primaryColor : null,
+                                color: _isItalicsActive
+                                    ? Theme.of(context).primaryColor
+                                    : null,
                               ),
                               IconButton(
-                                onPressed: selectedNode is TextNode ? _toggleUnderline : null,
+                                onPressed: selectedNode is TextNode
+                                    ? _toggleUnderline
+                                    : null,
                                 icon: const Icon(Icons.format_underline),
-                                color: _isUnderlineActive ? Theme.of(context).primaryColor : null,
+                                color: _isUnderlineActive
+                                    ? Theme.of(context).primaryColor
+                                    : null,
                               ),
                               IconButton(
-                                onPressed: selectedNode is TextNode ? _toggleStrikethrough : null,
+                                onPressed: selectedNode is TextNode
+                                    ? _toggleStrikethrough
+                                    : null,
                                 icon: const Icon(Icons.strikethrough_s),
-                                color: _isStrikethroughActive ? Theme.of(context).primaryColor : null,
+                                color: _isStrikethroughActive
+                                    ? Theme.of(context).primaryColor
+                                    : null,
                               ),
                               IconButton(
                                 onPressed: isSingleNodeSelected &&
                                         (selectedNode is TextNode &&
-                                            selectedNode.getMetadataValue('blockType') != header1Attribution)
+                                            selectedNode.getMetadataValue(
+                                                    'blockType') !=
+                                                header1Attribution)
                                     ? _convertToHeader1
                                     : null,
                                 icon: const Icon(Icons.title),
@@ -1268,7 +1403,9 @@ class KeyboardEditingToolbar extends StatelessWidget {
                               IconButton(
                                 onPressed: isSingleNodeSelected &&
                                         (selectedNode is TextNode &&
-                                            selectedNode.getMetadataValue('blockType') != header2Attribution)
+                                            selectedNode.getMetadataValue(
+                                                    'blockType') !=
+                                                header2Attribution)
                                     ? _convertToHeader2
                                     : null,
                                 icon: const Icon(Icons.title),
@@ -1277,25 +1414,32 @@ class KeyboardEditingToolbar extends StatelessWidget {
                               IconButton(
                                 onPressed: isSingleNodeSelected &&
                                         ((selectedNode is ParagraphNode &&
-                                                selectedNode.hasMetadataValue('blockType')) ||
-                                            (selectedNode is TextNode && selectedNode is! ParagraphNode))
+                                                selectedNode.hasMetadataValue(
+                                                    'blockType')) ||
+                                            (selectedNode is TextNode &&
+                                                selectedNode is! ParagraphNode))
                                     ? _convertToParagraph
                                     : null,
                                 icon: const Icon(Icons.wrap_text),
                               ),
                               IconButton(
                                 onPressed: isSingleNodeSelected &&
-                                        (selectedNode is TextNode && selectedNode is! ListItemNode ||
-                                            (selectedNode is ListItemNode && selectedNode.type != ListItemType.ordered))
+                                        (selectedNode is TextNode &&
+                                                selectedNode is! ListItemNode ||
+                                            (selectedNode is ListItemNode &&
+                                                selectedNode.type !=
+                                                    ListItemType.ordered))
                                     ? _convertToOrderedListItem
                                     : null,
                                 icon: const Icon(Icons.looks_one_rounded),
                               ),
                               IconButton(
                                 onPressed: isSingleNodeSelected &&
-                                        (selectedNode is TextNode && selectedNode is! ListItemNode ||
+                                        (selectedNode is TextNode &&
+                                                selectedNode is! ListItemNode ||
                                             (selectedNode is ListItemNode &&
-                                                selectedNode.type != ListItemType.unordered))
+                                                selectedNode.type !=
+                                                    ListItemType.unordered))
                                     ? _convertToUnorderedListItem
                                     : null,
                                 icon: const Icon(Icons.list),
@@ -1304,7 +1448,9 @@ class KeyboardEditingToolbar extends StatelessWidget {
                                 onPressed: isSingleNodeSelected &&
                                         selectedNode is TextNode &&
                                         (selectedNode is! ParagraphNode ||
-                                            selectedNode.getMetadataValue('blockType') != blockquoteAttribution)
+                                            selectedNode.getMetadataValue(
+                                                    'blockType') !=
+                                                blockquoteAttribution)
                                     ? _convertToBlockquote
                                     : null,
                                 icon: const Icon(Icons.format_quote),

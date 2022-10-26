@@ -71,25 +71,26 @@ import 'unknown_component.dart';
 /// the current text entry mode.
 class SuperEditor extends StatefulWidget {
   @Deprecated("Use unnamed SuperEditor() constructor instead")
-  SuperEditor.standard({
-    Key? key,
-    this.focusNode,
-    required this.editor,
-    this.composer,
-    this.scrollController,
-    this.documentLayoutKey,
-    Stylesheet? stylesheet,
-    this.customStylePhases = const [],
-    this.inputSource = DocumentInputSource.keyboard,
-    this.gestureMode = DocumentGestureMode.mouse,
-    this.androidHandleColor,
-    this.androidToolbarBuilder,
-    this.iOSHandleColor,
-    this.iOSToolbarBuilder,
-    this.createOverlayControlsClipper,
-    this.debugPaint = const DebugPaintConfig(),
-    this.autofocus = false,
-  })  : componentBuilders = defaultComponentBuilders,
+  SuperEditor.standard(
+      {Key? key,
+      this.focusNode,
+      required this.editor,
+      this.composer,
+      this.scrollController,
+      this.documentLayoutKey,
+      Stylesheet? stylesheet,
+      this.customStylePhases = const [],
+      this.inputSource = DocumentInputSource.keyboard,
+      this.gestureMode = DocumentGestureMode.mouse,
+      this.androidHandleColor,
+      this.androidToolbarBuilder,
+      this.iOSHandleColor,
+      this.iOSToolbarBuilder,
+      this.createOverlayControlsClipper,
+      this.debugPaint = const DebugPaintConfig(),
+      this.autofocus = false,
+      this.onInputAction})
+      : componentBuilders = defaultComponentBuilders,
         keyboardActions = defaultKeyboardActions,
         softwareKeyboardHandler = null,
         stylesheet = stylesheet ?? defaultStylesheet,
@@ -98,29 +99,30 @@ class SuperEditor extends StatefulWidget {
         super(key: key);
 
   @Deprecated("Use unnamed SuperEditor() constructor instead")
-  SuperEditor.custom({
-    Key? key,
-    this.focusNode,
-    required this.editor,
-    this.composer,
-    this.scrollController,
-    this.documentLayoutKey,
-    Stylesheet? stylesheet,
-    this.customStylePhases = const [],
-    List<ComponentBuilder>? componentBuilders,
-    SelectionStyles? selectionStyle,
-    this.inputSource = DocumentInputSource.keyboard,
-    this.gestureMode = DocumentGestureMode.mouse,
-    List<DocumentKeyboardAction>? keyboardActions,
-    this.softwareKeyboardHandler,
-    this.androidHandleColor,
-    this.androidToolbarBuilder,
-    this.iOSHandleColor,
-    this.iOSToolbarBuilder,
-    this.createOverlayControlsClipper,
-    this.debugPaint = const DebugPaintConfig(),
-    this.autofocus = false,
-  })  : stylesheet = stylesheet ?? defaultStylesheet,
+  SuperEditor.custom(
+      {Key? key,
+      this.focusNode,
+      required this.editor,
+      this.composer,
+      this.scrollController,
+      this.documentLayoutKey,
+      Stylesheet? stylesheet,
+      this.customStylePhases = const [],
+      List<ComponentBuilder>? componentBuilders,
+      SelectionStyles? selectionStyle,
+      this.inputSource = DocumentInputSource.keyboard,
+      this.gestureMode = DocumentGestureMode.mouse,
+      List<DocumentKeyboardAction>? keyboardActions,
+      this.softwareKeyboardHandler,
+      this.androidHandleColor,
+      this.androidToolbarBuilder,
+      this.iOSHandleColor,
+      this.iOSToolbarBuilder,
+      this.createOverlayControlsClipper,
+      this.debugPaint = const DebugPaintConfig(),
+      this.autofocus = false,
+      this.onInputAction})
+      : stylesheet = stylesheet ?? defaultStylesheet,
         selectionStyles = selectionStyle ?? defaultSelectionStyle,
         keyboardActions = keyboardActions ?? defaultKeyboardActions,
         documentOverlayBuilders = [const DefaultCaretOverlayBuilder()],
@@ -131,30 +133,31 @@ class SuperEditor extends StatefulWidget {
 
   /// Creates a `Super Editor` with common (but configurable) defaults for
   /// visual components, text styles, and user interaction.
-  SuperEditor({
-    Key? key,
-    this.focusNode,
-    required this.editor,
-    this.composer,
-    this.scrollController,
-    this.documentLayoutKey,
-    Stylesheet? stylesheet,
-    this.customStylePhases = const [],
-    List<ComponentBuilder>? componentBuilders,
-    SelectionStyles? selectionStyle,
-    this.inputSource = DocumentInputSource.keyboard,
-    this.gestureMode = DocumentGestureMode.mouse,
-    List<DocumentKeyboardAction>? keyboardActions,
-    this.softwareKeyboardHandler,
-    this.androidHandleColor,
-    this.androidToolbarBuilder,
-    this.iOSHandleColor,
-    this.iOSToolbarBuilder,
-    this.createOverlayControlsClipper,
-    this.documentOverlayBuilders = const [DefaultCaretOverlayBuilder()],
-    this.debugPaint = const DebugPaintConfig(),
-    this.autofocus = false,
-  })  : stylesheet = stylesheet ?? defaultStylesheet,
+  SuperEditor(
+      {Key? key,
+      this.focusNode,
+      required this.editor,
+      this.composer,
+      this.scrollController,
+      this.documentLayoutKey,
+      Stylesheet? stylesheet,
+      this.customStylePhases = const [],
+      List<ComponentBuilder>? componentBuilders,
+      SelectionStyles? selectionStyle,
+      this.inputSource = DocumentInputSource.keyboard,
+      this.gestureMode = DocumentGestureMode.mouse,
+      List<DocumentKeyboardAction>? keyboardActions,
+      this.softwareKeyboardHandler,
+      this.androidHandleColor,
+      this.androidToolbarBuilder,
+      this.iOSHandleColor,
+      this.iOSToolbarBuilder,
+      this.createOverlayControlsClipper,
+      this.documentOverlayBuilders = const [DefaultCaretOverlayBuilder()],
+      this.debugPaint = const DebugPaintConfig(),
+      this.autofocus = false,
+      this.onInputAction})
+      : stylesheet = stylesheet ?? defaultStylesheet,
         selectionStyles = selectionStyle ?? defaultSelectionStyle,
         keyboardActions = keyboardActions ?? defaultKeyboardActions,
         componentBuilders = componentBuilders != null
@@ -231,7 +234,8 @@ class SuperEditor extends StatefulWidget {
   /// If no clipper factory method is provided, then the overlay controls
   /// will be allowed to appear anywhere in the overlay in which they sit
   /// (probably the entire screen).
-  final CustomClipper<Rect> Function(BuildContext overlayContext)? createOverlayControlsClipper;
+  final CustomClipper<Rect> Function(BuildContext overlayContext)?
+      createOverlayControlsClipper;
 
   /// Contains a [Document] and alters that document as desired.
   final DocumentEditor editor;
@@ -266,6 +270,9 @@ class SuperEditor extends StatefulWidget {
   /// debugging, when true.
   final DebugPaintConfig debugPaint;
 
+  /// handle input action
+  final Function(TextInputAction action)? onInputAction;
+
   @override
   SuperEditorState createState() => SuperEditorState();
 }
@@ -277,10 +284,12 @@ class SuperEditorState extends State<SuperEditor> {
   late GlobalKey _docLayoutKey;
   SingleColumnLayoutPresenter? _docLayoutPresenter;
   late SingleColumnStylesheetStyler _docStylesheetStyler;
-  late SingleColumnLayoutCustomComponentStyler _docLayoutPerComponentBlockStyler;
+  late SingleColumnLayoutCustomComponentStyler
+      _docLayoutPerComponentBlockStyler;
   late SingleColumnLayoutSelectionStyler _docLayoutSelectionStyler;
 
   late FocusNode _focusNode;
+
   @visibleForTesting
   FocusNode get focusNode => _focusNode;
 
@@ -334,7 +343,8 @@ class SuperEditorState extends State<SuperEditor> {
       _composer.selection = null;
     }
     if (widget.focusNode != oldWidget.focusNode) {
-      _focusNode = (widget.focusNode ?? FocusNode())..addListener(_onFocusChange);
+      _focusNode = (widget.focusNode ?? FocusNode())
+        ..addListener(_onFocusChange);
     }
     if (widget.documentLayoutKey != oldWidget.documentLayoutKey) {
       _docLayoutKey = widget.documentLayoutKey ?? GlobalKey();
@@ -385,7 +395,8 @@ class SuperEditorState extends State<SuperEditor> {
       commonOps: CommonEditorOperations(
         editor: widget.editor,
         composer: _composer,
-        documentLayoutResolver: () => _docLayoutKey.currentState as DocumentLayout,
+        documentLayoutResolver: () =>
+            _docLayoutKey.currentState as DocumentLayout,
       ),
     );
   }
@@ -397,9 +408,11 @@ class SuperEditorState extends State<SuperEditor> {
 
     final document = editContext.editor.document;
 
-    _docStylesheetStyler = SingleColumnStylesheetStyler(stylesheet: widget.stylesheet);
+    _docStylesheetStyler =
+        SingleColumnStylesheetStyler(stylesheet: widget.stylesheet);
 
-    _docLayoutPerComponentBlockStyler = SingleColumnLayoutCustomComponentStyler();
+    _docLayoutPerComponentBlockStyler =
+        SingleColumnLayoutCustomComponentStyler();
 
     _docLayoutSelectionStyler = SingleColumnLayoutSelectionStyler(
       document: document,
@@ -444,12 +457,14 @@ class SuperEditorState extends State<SuperEditor> {
       return;
     }
 
-    final node = widget.editor.document.getNodeById(_composer.selection!.extent.nodeId);
+    final node =
+        widget.editor.document.getNodeById(_composer.selection!.extent.nodeId);
     if (node is! TextNode) {
       return;
     }
 
-    final textPosition = _composer.selection!.extent.nodePosition as TextPosition;
+    final textPosition =
+        _composer.selection!.extent.nodePosition as TextPosition;
 
     if (textPosition.offset == 0) {
       if (node.text.text.isEmpty) {
@@ -526,6 +541,7 @@ class SuperEditorState extends State<SuperEditor> {
           softwareKeyboardHandler: _softwareKeyboardHandler,
           hardwareKeyboardActions: widget.keyboardActions,
           floatingCursorController: _floatingCursorController,
+          onInputAction: widget.onInputAction,
           child: child,
         );
     }
@@ -549,8 +565,10 @@ class SuperEditorState extends State<SuperEditor> {
           commonOps: editContext.commonOps,
           scrollController: widget.scrollController,
           documentKey: _docLayoutKey,
-          handleColor: widget.androidHandleColor ?? Theme.of(context).primaryColor,
-          popoverToolbarBuilder: widget.androidToolbarBuilder ?? (_) => const SizedBox(),
+          handleColor:
+              widget.androidHandleColor ?? Theme.of(context).primaryColor,
+          popoverToolbarBuilder:
+              widget.androidToolbarBuilder ?? (_) => const SizedBox(),
           createOverlayControlsClipper: widget.createOverlayControlsClipper,
           showDebugPaint: widget.debugPaint.gestures,
           child: documentLayout,
@@ -565,7 +583,8 @@ class SuperEditorState extends State<SuperEditor> {
           scrollController: widget.scrollController,
           documentKey: _docLayoutKey,
           handleColor: widget.iOSHandleColor ?? Theme.of(context).primaryColor,
-          popoverToolbarBuilder: widget.iOSToolbarBuilder ?? (_) => const SizedBox(),
+          popoverToolbarBuilder:
+              widget.iOSToolbarBuilder ?? (_) => const SizedBox(),
           floatingCursorController: _floatingCursorController,
           createOverlayControlsClipper: widget.createOverlayControlsClipper,
           showDebugPaint: widget.debugPaint.gestures,
@@ -589,8 +608,12 @@ class SuperEditorState extends State<SuperEditor> {
             // have to explicitly tell the gesture area to be at least as tall
             // as the viewport (in case the document content is shorter than
             // the viewport).
-            minWidth: viewportConstraints.maxWidth < double.infinity ? viewportConstraints.maxWidth : 0,
-            minHeight: viewportConstraints.maxHeight < double.infinity ? viewportConstraints.maxHeight : 0,
+            minWidth: viewportConstraints.maxWidth < double.infinity
+                ? viewportConstraints.maxWidth
+                : 0,
+            minHeight: viewportConstraints.maxHeight < double.infinity
+                ? viewportConstraints.maxHeight
+                : 0,
           ),
           child: Stack(
             clipBehavior: Clip.none,
@@ -668,10 +691,12 @@ abstract class DocumentLayerBuilder {
 class FunctionalDocumentLayerBuilder implements DocumentLayerBuilder {
   const FunctionalDocumentLayerBuilder(this._delegate);
 
-  final Widget Function(BuildContext context, EditContext editContext) _delegate;
+  final Widget Function(BuildContext context, EditContext editContext)
+      _delegate;
 
   @override
-  Widget build(BuildContext context, EditContext editContext) => _delegate(context, editContext);
+  Widget build(BuildContext context, EditContext editContext) =>
+      _delegate(context, editContext);
 }
 
 /// A [DocumentLayerBuilder] that paints a caret at the primary selection extent
@@ -885,7 +910,8 @@ final defaultStylesheet = Stylesheet(
   inlineTextStyler: defaultInlineTextStyler,
 );
 
-TextStyle defaultInlineTextStyler(Set<Attribution> attributions, TextStyle existingStyle) {
+TextStyle defaultInlineTextStyler(
+    Set<Attribution> attributions, TextStyle existingStyle) {
   return existingStyle.merge(defaultStyleBuilder(attributions));
 }
 
@@ -906,13 +932,15 @@ TextStyle defaultStyleBuilder(Set<Attribution> attributions) {
       newStyle = newStyle.copyWith(
         decoration: newStyle.decoration == null
             ? TextDecoration.underline
-            : TextDecoration.combine([TextDecoration.underline, newStyle.decoration!]),
+            : TextDecoration.combine(
+                [TextDecoration.underline, newStyle.decoration!]),
       );
     } else if (attribution == strikethroughAttribution) {
       newStyle = newStyle.copyWith(
         decoration: newStyle.decoration == null
             ? TextDecoration.lineThrough
-            : TextDecoration.combine([TextDecoration.lineThrough, newStyle.decoration!]),
+            : TextDecoration.combine(
+                [TextDecoration.lineThrough, newStyle.decoration!]),
       );
     } else if (attribution is LinkAttribution) {
       newStyle = newStyle.copyWith(

@@ -10,6 +10,8 @@ import 'package:super_editor/super_editor.dart';
 import '_example_document.dart';
 import '_toolbar.dart';
 
+import 'package:logging/logging.dart' as logging;
+
 /// Example of a rich text editor.
 ///
 /// This editor will expand in functionality as package
@@ -48,6 +50,8 @@ class _ExampleEditorState extends State<ExampleEditor> {
   String htmlParse = '';
   List<c.ChildrenContent> contents = [];
   List<String> htmlPas = [];
+
+  final log = logging.Logger('MyClassName');
 
   @override
   void initState() {
@@ -94,7 +98,9 @@ class _ExampleEditorState extends State<ExampleEditor> {
     _doc = createInitialDocument(paragraphs[0])
       ..addListener(_hideOrShowToolbar);
     _docEditor = DocumentEditor(document: _doc as MutableDocument);
-    _composer = DocumentComposer()..addListener(_hideOrShowToolbar);
+    _composer = DocumentComposer(imeConfiguration: ImeConfiguration(
+      keyboardActionButton: TextInputAction.done
+    ))..addListener(_hideOrShowToolbar);
     _docOps = CommonEditorOperations(
       editor: _docEditor,
       composer: _composer,
@@ -407,6 +413,9 @@ class _ExampleEditorState extends State<ExampleEditor> {
             }
           }
 
+          log.info(paragraphs.toString());
+          editorDocLog.info('test');
+
           print(paragraphs.toString());
         },
         child: _isLight
@@ -452,9 +461,9 @@ class _ExampleEditorState extends State<ExampleEditor> {
         ],
         gestureMode: _gestureMode,
         inputSource: _inputSource,
-        keyboardActions: _inputSource == DocumentInputSource.ime
-            ? defaultImeKeyboardActions
-            : defaultKeyboardActions,
+        // keyboardActions: _inputSource == DocumentInputSource.ime
+        //     ? defaultImeKeyboardActions
+        //     : defaultKeyboardActions,
         androidToolbarBuilder: (_) => AndroidTextEditingFloatingToolbar(
           onCutPressed: _cut,
           onCopyPressed: _copy,
@@ -466,6 +475,9 @@ class _ExampleEditorState extends State<ExampleEditor> {
           onCopyPressed: _copy,
           onPastePressed: _paste,
         ),
+        onInputAction: (action){
+          print("Input action $action");
+        },
       ),
     );
   }
