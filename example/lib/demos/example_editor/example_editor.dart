@@ -53,6 +53,10 @@ class _ExampleEditorState extends State<ExampleEditor> {
 
   final log = logging.Logger('MyClassName');
 
+  // editor
+  List<EditorModel> editorModels = [];
+
+
   @override
   void initState() {
     super.initState();
@@ -95,19 +99,43 @@ class _ExampleEditorState extends State<ExampleEditor> {
       }
     }
 
-    _doc = createInitialDocument(paragraphs[0])
-      ..addListener(_hideOrShowToolbar);
-    _docEditor = DocumentEditor(document: _doc as MutableDocument);
-    _composer = DocumentComposer(imeConfiguration: ImeConfiguration(
-      keyboardActionButton: TextInputAction.done
-    ))..addListener(_hideOrShowToolbar);
-    _docOps = CommonEditorOperations(
-      editor: _docEditor,
-      composer: _composer,
-      documentLayoutResolver: () =>
-          _docLayoutKey.currentState as DocumentLayout,
-    );
-    _editorFocusNode = FocusNode();
+    paragraphs.forEach((element) {
+      GlobalKey _docLayoutKey = GlobalKey();
+      Document _doc = createInitialDocument(element);
+      DocumentEditor _docEditor =
+      DocumentEditor(document: _doc as MutableDocument);
+      DocumentComposer _composer = DocumentComposer(
+          imeConfiguration:
+          ImeConfiguration(keyboardActionButton: TextInputAction.done));
+      CommonEditorOperations _docOps = CommonEditorOperations(
+        editor: _docEditor,
+        composer: _composer,
+        documentLayoutResolver: () =>
+        _docLayoutKey.currentState as DocumentLayout,
+      );
+      EditorModel editorModel = EditorModel(
+          doc: _doc,
+          docEditor: _docEditor,
+          composer: _composer,
+          docOps: _docOps,
+          focusNode: FocusNode(),
+          docLayoutKey: _docLayoutKey);
+      editorModels.add(editorModel);
+    });
+
+    // _doc = createInitialDocument(paragraphs[0])
+    //   ..addListener(_hideOrShowToolbar);
+    // _docEditor = DocumentEditor(document: _doc as MutableDocument);
+    // _composer = DocumentComposer(imeConfiguration: ImeConfiguration(
+    //   keyboardActionButton: TextInputAction.done
+    // ))..addListener(_hideOrShowToolbar);
+    // _docOps = CommonEditorOperations(
+    //   editor: _docEditor,
+    //   composer: _composer,
+    //   documentLayoutResolver: () =>
+    //       _docLayoutKey.currentState as DocumentLayout,
+    // );
+    // _editorFocusNode = FocusNode();
     _scrollController = ScrollController()..addListener(_hideOrShowToolbar);
 
     setState(() {
@@ -370,9 +398,9 @@ class _ExampleEditorState extends State<ExampleEditor> {
                     height: 100,
                   ),
                   Expanded(
-                    child: _buildEditor(),
+                    child: _buildBody(context),
                   ),
-                  if (_isMobile) _buildMountedToolbar(),
+                  // if (_isMobile) _buildMountedToolbar(),
                 ],
               ),
               Align(
@@ -381,6 +409,35 @@ class _ExampleEditorState extends State<ExampleEditor> {
               ),
             ],
           );
+  }
+
+  Widget _buildBody(BuildContext buildContext) {
+    return Container(
+        child: ListView.separated(
+          itemCount: paragraphs.length,
+          // physics: NeverScrollableScrollPhysics(),
+          shrinkWrap: true,
+          itemBuilder: (context, index) {
+            return Padding(
+              padding: EdgeInsets.only(bottom: 10, left: 20, right: 20),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: <Widget>[
+                  SizedBox(
+                    height: 4,
+                  ),
+                  _buildEditor(editorModels[index]),
+                ],
+              ),
+            );
+          },
+          separatorBuilder: (context, index) {
+            return SizedBox(
+              height: 10,
+              child: Divider(),
+            );
+          },
+        ));
   }
 
   Widget _buildLightAndDarkModeToggle() {
@@ -429,15 +486,15 @@ class _ExampleEditorState extends State<ExampleEditor> {
     );
   }
 
-  Widget _buildEditor() {
+  Widget _buildEditor(EditorModel editorModel) {
     return ColoredBox(
       color: _isLight ? _lightBackground : _darkBackground,
       child: SuperEditor(
-        editor: _docEditor,
-        composer: _composer,
-        focusNode: _editorFocusNode,
-        scrollController: _scrollController,
-        documentLayoutKey: _docLayoutKey,
+        editor: editorModel.docEditor,
+        composer: editorModel.composer,
+        focusNode: editorModel.focusNode,
+        // scrollController: _scrollController,
+        documentLayoutKey: editorModel.docLayoutKey,
         documentOverlayBuilders: [
           DefaultCaretOverlayBuilder(
             CaretStyle()
@@ -457,7 +514,7 @@ class _ExampleEditorState extends State<ExampleEditor> {
         ),
         componentBuilders: [
           ...defaultComponentBuilders,
-          TaskComponentBuilder(_docEditor),
+          TaskComponentBuilder(editorModel.docEditor),
         ],
         gestureMode: _gestureMode,
         inputSource: _inputSource,
@@ -477,6 +534,9 @@ class _ExampleEditorState extends State<ExampleEditor> {
         ),
         onInputAction: (action){
           print("Input action $action");
+        },
+        onCheckChanged: (changed){
+          print("Check changed $changed");
         },
       ),
     );
@@ -538,3 +598,20 @@ final _darkModeStyles = [
     },
   ),
 ];
+
+class EditorModel {
+  final Document doc;
+  final DocumentEditor docEditor;
+  final DocumentComposer composer;
+  final CommonEditorOperations docOps;
+  final FocusNode focusNode;
+  final GlobalKey? docLayoutKey;
+
+  EditorModel(
+      {required this.doc,
+        required this.docEditor,
+        required this.composer,
+        required this.docOps,
+        required this.focusNode,
+        this.docLayoutKey});
+}

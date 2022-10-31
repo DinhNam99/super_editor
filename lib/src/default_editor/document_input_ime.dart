@@ -43,6 +43,7 @@ class DocumentImeInteractor extends StatefulWidget {
     this.hardwareKeyboardActions = const [],
     this.floatingCursorController,
     this.onInputAction,
+    this.onCheckChanged,
     required this.child,
   }) : super(key: key);
 
@@ -66,6 +67,9 @@ class DocumentImeInteractor extends StatefulWidget {
 
   /// handle input action
   final Function(TextInputAction action)? onInputAction;
+
+  // check change text
+  final Function(bool changed)? onCheckChanged;
 
   final FloatingCursorController? floatingCursorController;
 
@@ -312,6 +316,11 @@ class _DocumentImeInteractorState extends State<DocumentImeInteractor>
         "Received edit deltas from platform: ${textEditingDeltas.length} deltas");
     for (final delta in textEditingDeltas) {
       editorImeLog.info("$delta");
+      if(delta is TextEditingDeltaInsertion || delta is TextEditingDeltaReplacement || delta is TextEditingDeltaDeletion){
+        if(widget.onCheckChanged != null) {
+          widget.onCheckChanged!(true);
+        }
+      }
     }
 
     final imeValueBeforeChange = currentTextEditingValue;

@@ -89,7 +89,8 @@ class SuperEditor extends StatefulWidget {
       this.createOverlayControlsClipper,
       this.debugPaint = const DebugPaintConfig(),
       this.autofocus = false,
-      this.onInputAction})
+      this.onInputAction,
+      this.onCheckChanged})
       : componentBuilders = defaultComponentBuilders,
         keyboardActions = defaultKeyboardActions,
         softwareKeyboardHandler = null,
@@ -121,7 +122,8 @@ class SuperEditor extends StatefulWidget {
       this.createOverlayControlsClipper,
       this.debugPaint = const DebugPaintConfig(),
       this.autofocus = false,
-      this.onInputAction})
+      this.onInputAction,
+      this.onCheckChanged})
       : stylesheet = stylesheet ?? defaultStylesheet,
         selectionStyles = selectionStyle ?? defaultSelectionStyle,
         keyboardActions = keyboardActions ?? defaultKeyboardActions,
@@ -156,7 +158,8 @@ class SuperEditor extends StatefulWidget {
       this.documentOverlayBuilders = const [DefaultCaretOverlayBuilder()],
       this.debugPaint = const DebugPaintConfig(),
       this.autofocus = false,
-      this.onInputAction})
+      this.onInputAction,
+      this.onCheckChanged})
       : stylesheet = stylesheet ?? defaultStylesheet,
         selectionStyles = selectionStyle ?? defaultSelectionStyle,
         keyboardActions = keyboardActions ?? defaultKeyboardActions,
@@ -272,6 +275,9 @@ class SuperEditor extends StatefulWidget {
 
   /// handle input action
   final Function(TextInputAction action)? onInputAction;
+
+  // check change text
+  final Function(bool changed)? onCheckChanged;
 
   @override
   SuperEditorState createState() => SuperEditorState();
@@ -542,6 +548,7 @@ class SuperEditorState extends State<SuperEditor> {
           hardwareKeyboardActions: widget.keyboardActions,
           floatingCursorController: _floatingCursorController,
           onInputAction: widget.onInputAction,
+          onCheckChanged: widget.onCheckChanged,
           child: child,
         );
     }
